@@ -14,12 +14,10 @@ object Dao {
   var conn: Connection = null
 
   def save(arr: String, prev: String = null) {
-    val save = exec(url, username, password)(_)
-
     select("select count(*) from huarong t where t.arr = ?")(_.setString(1, arr)) {
       rs =>
         if (rs.getInt(1) == 0)
-          save("insert into huarong(arr, prev, status) values(?, ?, ?)") {
+          exec("insert into huarong(arr, prev, status) values(?, ?, ?)") {
             ps =>
               ps.setString(1, arr)
               ps.setString(2, prev)
@@ -29,8 +27,7 @@ object Dao {
   }
 
   def update(arr: String, status: Int) {
-    val save = exec(url, username, password)(_)
-    save("update huarong set status = ? where arr = ?") {
+    exec("update huarong set status = ? where arr = ?") {
       ps =>
         ps.setInt(1, status)
         ps.setString(2, arr)
@@ -60,15 +57,11 @@ object Dao {
   }
 
   def truncate {
-    conn = if (username == null || password == null) DriverManager.getConnection(url)
-    else DriverManager.getConnection(url, username, password)
-
-    val save = exec(url, username, password)(_)
-    save("truncate table huarong")(x => Unit)
+    conn = DriverManager.getConnection(url, username, password)
+    exec("truncate table huarong")(x => Unit)
   }
   
-  def exec(url: String, username: String = null, password: String = null)
-          (sql: String)(ps: PreparedStatement => Unit) = {
+  def exec(sql: String)(ps: PreparedStatement => Unit) = {
     var pstmt: PreparedStatement = null
     try {
       pstmt = conn.prepareStatement(sql, ResultSet.TYPE_FORWARD_ONLY)

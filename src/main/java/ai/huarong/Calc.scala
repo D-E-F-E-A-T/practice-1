@@ -10,11 +10,11 @@ object Calc {
     Dao.truncate
     Dao.save(stringOf(arr))
 
-    var list: ListBuffer[String] = null
+    val list = ListBuffer[String]()
 
     do {
-      list = Dao.find
-      list.foreach {
+      list.clear
+      (list ++= Dao.find).foreach {
         x =>
           val array = toArray(x)
 
@@ -22,7 +22,7 @@ object Calc {
             result(x)
             return
           }
-          
+
           val empty = findEmpty(array)
 
           val moveSingle = moveCell(array)(_, _, _, _, _, _, _)
@@ -33,13 +33,9 @@ object Calc {
               val x = cur._1
               val y = cur._2
 
-              // 空位上格
               if (x != 0) moveSingle(x, x - 1, x - 2, y, y, y, x > 1)
-              // 空位下格
               if (x != 4) moveSingle(x, x + 1, x + 2, y, y, y, x < 3)
-              // 空位左格
               if (y != 0) moveSingle(x, x, x, y, y - 1, y - 2, y > 1)
-              // 空位右格
               if (y != 3) moveSingle(x, x, x, y, y + 1, y + 2, y < 2)
           }
 
@@ -130,27 +126,22 @@ object Calc {
     var i = 1
     Dao.find(arr).foreach {
       x =>
-        println("结果" + i + "://")
+        println("结果" + i + ":")
         
         var j = 0
         
         x.split(":").foreach {
           y =>
-            if ((j / 4) + (j % 4).toString == y)
-              print("**")
-            else if (y == "99")
-              print("##")
-            else if (y == "-1")
-              print("  ")
-            else if (y.endsWith((j % 4).toString))
-              print("||")
-            else if (y.startsWith((j / 4).toString))
-              print("==")
-            else if (y.endsWith((j / 4).toString))
-              print("==")
+            y match {
+              case _ if ((j / 4) + (j % 4).toString == y) => print("**")
+              case _ if (y == "99")                       => print("##")
+              case _ if (y == "-1")                       => print("  ")
+              case _ if (y.endsWith((j % 4).toString))    => print("||")
+              case _ if (y.startsWith((j / 4).toString))  => print("==")
+              case _ if (y.endsWith((j / 4).toString))    => print("==")
+            }
 
-            if (j % 4 == 3)
-              println
+            if (j % 4 == 3) println
             j = j + 1
         }
         i = i + 1
@@ -183,6 +174,9 @@ object Calc {
     empty
   }
 
+  /**
+   * 判断是否通关
+   */
   def isWin(arr: Array[Array[String]]) = {
     if (arr(4)(1) == arr(4)(2) && arr(4)(1) == "99")
       true
