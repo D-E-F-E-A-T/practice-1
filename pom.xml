@@ -1,0 +1,36 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>ai</groupId>
+	<artifactId>practice</artifactId>
+	<packaging>war</packaging>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>huarong Maven Webapp</name>
+	<url>http://maven.apache.org</url>
+	<properties>
+		<scala.version>2.11.8</scala.version>
+	</properties>
+	<dependencies>
+		<!-- 引入Scala类库 -->
+		<dependency>
+			<groupId>org.scala-lang</groupId>
+			<artifactId>scala-library</artifactId>
+			<version>${scala.version}</version>
+		</dependency>
+		<!-- 引入Scala编译 -->
+		<dependency>
+			<groupId>org.scala-lang</groupId>
+			<artifactId>scala-reflect</artifactId>
+			<version>${scala.version}</version>
+		</dependency>
+		<!-- MariaDB驱动 -->
+		<dependency>
+			<groupId>org.mariadb.jdbc</groupId>
+			<artifactId>mariadb-java-client</artifactId>
+			<version>1.5.0-RC1</version>
+		</dependency>
+	</dependencies>
+	<build>
+		<finalName>practice</finalName>
+	</build>
+</project>
