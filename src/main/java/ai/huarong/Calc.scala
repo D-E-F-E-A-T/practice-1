@@ -7,8 +7,7 @@ object Calc {
   def apply(arr: Array[Array[String]]) {
     println("原始：" + stringOf(arr))
 
-    Dao.truncate
-    Dao.save(stringOf(arr))
+    Dao.truncate.save(stringOf(arr))
 
     val list = ListBuffer[String]()
 
@@ -149,8 +148,7 @@ object Calc {
   }
 
   def memory(arr: Array[Array[String]], prev: Array[Array[String]]) {
-    Dao.save(stringOf(arr), stringOf(prev))
-    Dao.update(stringOf(prev), 1)
+    Dao.save(stringOf(arr), stringOf(prev)).update(stringOf(prev), 1)
   }
 
   def toArray(arr: String) = {

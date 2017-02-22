@@ -13,7 +13,7 @@ object Dao {
   
   var conn: Connection = null
 
-  def save(arr: String, prev: String = null) {
+  def save(arr: String, prev: String = null) = {
     select("select count(*) from huarong t where t.arr = ?")(_.setString(1, arr)) {
       rs =>
         if (rs.getInt(1) == 0)
@@ -24,6 +24,7 @@ object Dao {
               ps.setInt(3, 0)
           }
     }
+    Dao
   }
 
   def update(arr: String, status: Int) {
@@ -56,9 +57,10 @@ object Dao {
     }
   }
 
-  def truncate {
+  def truncate = {
     conn = DriverManager.getConnection(url, username, password)
     exec("truncate table huarong")(x => Unit)
+    Dao
   }
   
   def exec(sql: String)(ps: PreparedStatement => Unit) = {
